@@ -5,6 +5,7 @@ import { getCollegeData } from "../services/collegeService.js";
 const getAllColleges = async (req, res) => {
   try {
     const collegeData = await College.find({});
+
     sendStatuswithData.success(res, collegeData);
   } catch (error) {
     console.log(error);
@@ -49,4 +50,24 @@ const getSimilarCollege = async (req, res) => {
   }
 };
 
-export { getAllColleges, getSingleCollege, getSimilarCollege };
+const filterColleges = async (req, res) => {
+  try {
+    const { state, rating, courses } = req.query;
+    console.log(state, rating, courses);
+
+    // filter colleges based on state, rating and courses if any of them esists;
+
+    const collegeData = await College.find({
+      ...(state && { "location.state": state }),
+      ...(rating && { rating: rating }),
+      ...(courses && { courses: { $in: courses } }),
+    }).lean();
+
+    sendStatuswithData.success(res, collegeData);
+  } catch (error) {
+    console.log(error);
+    sendStatuswithData.serverError(res, "Something went wrong");
+  }
+};
+
+export { getAllColleges, getSingleCollege, getSimilarCollege, filterColleges };
