@@ -53,7 +53,6 @@ const getSimilarCollege = async (req, res) => {
 const filterColleges = async (req, res) => {
   try {
     const { state, rating, courses } = req.query;
-    console.log(state, rating, courses);
 
     // filter colleges based on state, rating and courses if any of them esists;
 
